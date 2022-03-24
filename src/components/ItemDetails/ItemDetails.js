@@ -5,31 +5,32 @@ import axios from 'axios';
 const HOST = "http://localhost:8080";
 
 class ItemDetails extends Component {
-  itemUrl = 'https://www.chewy.com/american-journey-pate-poultry-seafood/dp/160934';
+  state = {
+    items: []
+  }
+
   itemsUrl = `${HOST}/items`;
 
   componentDidMount() {
-    // const headers = {
-    //   'Access-Control-Allow-Origin': '*',
-    //   'Content-Type': 'text/html',
-    // };
-    // axios({
-    //   method: 'get',
-    //   url: this.itemUrl,
-    //   headers: headers
-    // }).then(res => {
-    //   console.log(res);
-    // })
-
     axios.get(this.itemsUrl).then(res => {
       console.log(res);
+      this.setState({ items: res.data });
     })
   }
 
   render() {
     return (
       <div className={styles.ItemDetails} data-testid="ItemDetails">
-        ItemDetails Component
+        <ul>
+          {
+            this.state.items.map(item =>
+            <li key={item.id}>
+              <div>{item.name}</div>
+              <div>{item.price}</div>
+            </li>
+            )
+          }
+        </ul>
       </div>
     )
   }
