@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
-import styles from './ItemDetails.module.scss';
 import axios from 'axios';
+import { Box, Card, CardHeader, CardBody, CardFooter, Button } from 'grommet';
+import { Favorite, ShareOption } from 'grommet-icons';
 
 const HOST = "http://localhost:8080";
 
@@ -20,18 +21,24 @@ class ItemDetails extends Component {
 
   render() {
     return (
-      <div className={styles.ItemDetails} data-testid="ItemDetails">
-        <ul>
-          {
-            this.state.items.map(item =>
-            <li key={item.id}>
-              <div>{item.name}</div>
-              <div>{item.price}</div>
-            </li>
-            )
-          }
-        </ul>
-      </div>
+      <Box pad="medium" gap="medium" direction="row" wrap="true">
+        {
+          this.state.items.map(item =>
+            <Card height="medium" width="300px" background="light-1" gap="medium" pad="medium">
+              <CardHeader>{item.name}</CardHeader>
+              <CardBody>${item.price}</CardBody>
+              <CardFooter>
+                <Button
+                icon={<Favorite color="red" />}
+                hoverIndicator
+                />
+                <Button icon={<ShareOption color="plain" />} hoverIndicator />
+              </CardFooter>
+            </Card>
+          )
+        }
+      </Box>
+
     )
   }
 }
