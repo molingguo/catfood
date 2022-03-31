@@ -19,25 +19,36 @@ class ItemDetails extends Component {
     })
   }
 
-  render() {
+  ItemPrice(props) {
+    const lastPrice = props.prices[props.prices.length - 1]
+    return <span>${lastPrice.value}</span>
+  }
 
+  Promotions(props) {
+    const lastPrice = props.prices[props.prices.length - 1]
     return (
-      <Box pad="medium" gap="medium" direction="row" wrap="true">
+      <Box direction="row">
+        {lastPrice.promotions.length > 0 &&
+          lastPrice.promotions.map(promo =>
+            <Tag key={promo} value={promo} size="small" background="#1b8b3f" border={false}></Tag>
+          )
+        }
+      </Box>
+    )
+  }
+
+  render() {
+    return (
+      <Box pad="medium" gap="medium" direction="row" wrap={true}>
         {
           this.state.items.map(item =>
-            <Card height="auto" width="300px" background="light-1" gap="medium" pad="medium">
+            <Card key={item.name} height="auto" width="300px" background="light-1" gap="medium" pad="medium">
               <CardHeader height="80px">{item.name}</CardHeader>
               <CardBody align="center">
                 <Box height="180px"><Image fit="contain" src={item.image}></Image></Box>
-                <span>${item.price}</span>
+                <this.ItemPrice prices={item.prices} />
                 <span>{ item.size }</span>
-                <Box direction="row">
-                  {
-                    item.promotions.length > 0 ? item.promotions.map(promo =>
-                      <Tag value={promo} size="small" background="#1b8b3f" border="false"></Tag>
-                    ) : <span></span>
-                  }
-                </Box>
+                <this.Promotions prices={item.prices} />
               </CardBody>
               <CardFooter>
                 <Button
