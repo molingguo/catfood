@@ -32,7 +32,7 @@ const AppBar = (props) => (
 function App() {
   return (
     <Grommet theme={theme}>
-      <AppBar>Hello Grommet!</AppBar>
+      <AppBar>Ricecake & Zorro</AppBar>
       <ItemDetails />
     </Grommet>
   );
