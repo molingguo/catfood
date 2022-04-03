@@ -3,7 +3,8 @@ import axios from 'axios';
 import { Box, Card, CardHeader, CardBody, Image, Tag, Anchor, Text } from 'grommet';
 import _ from "lodash";
 
-const HOST = "http://localhost:8080";
+// const HOST = "http://localhost:8080";
+const HOST = "http://catfood-server-dev.us-east-1.elasticbeanstalk.com";
 
 class ItemDetails extends Component {
   state = {
