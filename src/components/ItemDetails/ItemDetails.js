@@ -4,8 +4,8 @@ import { Box, Card, CardHeader, CardBody, Image, Tag, Anchor, Text } from 'gromm
 import _ from "lodash";
 
 // const HOST = "http://localhost:8080";
-const HOST = "https://catfood-server-dev.us-east-1.elasticbeanstalk.com";
-// const HOST = "https://catfood.molingguo.com";
+// const HOST = "http://catfood-server-dev.us-east-1.elasticbeanstalk.com";
+const HOST = "https://catfoodserver.molingguo.com/";
 
 class ItemDetails extends Component {
   state = {
