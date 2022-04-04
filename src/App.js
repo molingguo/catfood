@@ -34,9 +34,9 @@ const AppBar = (props) => (
   />
 );
 
-const HOST = "http://localhost:8080";
+// const HOST = "http://localhost:8080";
 // const HOST = "http://catfood-server-dev.us-east-1.elasticbeanstalk.com";
-// const HOST = "https://catfoodserver.molingguo.com/";
+const HOST = "https://catfoodserver.molingguo.com/";
 const itemsUrl = `${HOST}/items`;
 
 class App extends React.Component {
