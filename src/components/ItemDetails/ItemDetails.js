@@ -36,21 +36,24 @@ export class ItemDetails extends Component {
           <Box height="120px" margin={{vertical: "10px"}} align="start">
             <Image fit="contain" src={item.image}></Image>
           </Box>
-          <DataChart
-            data={data}
-            series={[
-              { property: 'date', render: (value, datam, dataIndex) => {
-                return format(new Date(value), 'MMM d HH:mm');
-              }},
-              { label: 'price', property: 'value', prefix: '$'},
-              { label: 'promotion', property: 'promotions', render: (value) => value.length > 0 ? value.join(', ') : null },
-              { property: 'hasPromo', render: () => null }
-            ]}
-            chart={chartOptions}
-            guide={{ y: { granularity: 'medium' }}}
-            detail={true}
-            legend={true}
-          />
+          { item.prices.length > 1 ?
+            <DataChart
+              data={data}
+              series={[
+                { property: 'date', render: (value, datam, dataIndex) => {
+                  return format(new Date(value), 'MMM d HH:mm');
+                }},
+                { label: 'price', property: 'value', prefix: '$'},
+                { label: 'promotion', property: 'promotions', render: (value) => value.length > 0 ? value.join(', ') : null },
+                { property: 'hasPromo', render: () => null }
+              ]}
+              chart={chartOptions}
+              guide={{ y: { granularity: 'medium' }}}
+              detail={true}
+              legend={true}
+            /> :
+            <Box>Not Enough Data</Box>
+          }
         </CardBody>
       </Box>
     )

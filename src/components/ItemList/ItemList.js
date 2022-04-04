@@ -23,12 +23,13 @@ class ItemList extends Component {
     )
   }
 
-  render() {
+  ItemSummary(props) {
+    const items = props.items;
+    const scope = props.scope;
     return (
-      <Box pad="medium" gap="medium" direction="row" wrap={true}>
-        { this.props.isLoading && <Spinner />}
+      <Box gap="medium" direction="row" wrap={true}>
         {
-          this.props.items.map(item =>
+          items.map(item =>
             <Card key={item.name} height="auto" width="290px" background="light-1" margin="xsmall" pad="medium">
               <CardHeader height="65px">
                 <Anchor href={`/item/${item.id}`} weight="normal" size="small">
@@ -39,15 +40,32 @@ class ItemList extends Component {
                 <Anchor href={item.link} target="_blank">
                   <Box height="120px" margin={{vertical: "10px"}}><Image fit="contain" src={item.image}></Image></Box>
                 </Anchor>
-                <this.ItemPrice prices={item.prices} />
+                <scope.ItemPrice prices={item.prices} />
                 <Text size="small">{ item.size }</Text>
-                <this.Promotions prices={item.prices} />
+                <scope.Promotions prices={item.prices} />
               </CardBody>
             </Card>
           )
         }
       </Box>
+    )
+  }
 
+  render() {
+    let groupedItems = [];
+    if (this.props.items.length > 0) groupedItems = _.groupBy(this.props.items, 'category')
+    return (
+      <Box pad="medium" gap="medium">
+        { this.props.isLoading && <Spinner />}
+        { _.map(groupedItems, (items, category) => {
+          return (
+            <Box key={category}>
+              <div>{category}</div>
+              <this.ItemSummary items={items} scope={this} />
+            </Box>
+          )
+        })}
+      </Box>
     )
   }
 }
