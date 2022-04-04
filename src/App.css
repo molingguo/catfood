@@ -2,6 +2,6 @@ body {
   margin: 0;
 }
 
-a {
-  text-decoration: none;
+a, a:hover {
+  text-decoration: none !important;
 }

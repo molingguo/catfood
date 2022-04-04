@@ -1,6 +1,11 @@
-import { Box, Grommet } from 'grommet';
+import { Box, Grommet, Anchor } from 'grommet';
 import './App.css';
+import { Routes, Route } from "react-router-dom";
+import ItemList from './components/ItemList/ItemList';
+import axios from 'axios';
 import ItemDetails from './components/ItemDetails/ItemDetails';
+import _ from "lodash";
+import React from 'react'
 
 const theme = {
   global: {
@@ -29,13 +34,37 @@ const AppBar = (props) => (
   />
 );
 
-function App() {
-  return (
-    <Grommet theme={theme}>
-      <AppBar>Ricecake & Zorro</AppBar>
-      <ItemDetails />
-    </Grommet>
-  );
+const HOST = "http://localhost:8080";
+// const HOST = "http://catfood-server-dev.us-east-1.elasticbeanstalk.com";
+// const HOST = "https://catfoodserver.molingguo.com/";
+const itemsUrl = `${HOST}/items`;
+
+class App extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { items: [], isLoading: true }
+  }
+
+  componentDidMount() {
+    axios.get(itemsUrl).then(res => {
+      console.log(res);
+      this.setState({ items: _.sortBy(res.data, ['name']), isLoading: false });
+    })
+  }
+
+  render() {
+    return (
+      <Grommet theme={theme}>
+        <AppBar>
+          <Anchor href="/" color="white" weight="normal">Ricecake & Zorro</Anchor>
+        </AppBar>
+        <Routes>
+          <Route path="/" element={<ItemList items={this.state.items} isLoading={this.state.isLoading} />} />
+          <Route path="/item/:id" element={<ItemDetails items={this.state.items} />} />
+        </Routes>
+      </Grommet>
+    )
+  }
 }
 
 export default App;

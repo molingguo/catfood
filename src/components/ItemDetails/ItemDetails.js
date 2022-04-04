@@ -1,66 +1,67 @@
-import React, { Component } from 'react'
-import axios from 'axios';
-import { Box, Card, CardHeader, CardBody, Image, Tag, Anchor, Text } from 'grommet';
-import _ from "lodash";
+import { Box, CardHeader, CardBody, Anchor, Image, DataChart } from 'grommet';
+import React, { Component } from 'react';
+import { withParams } from '../../utils/router';
+import { format } from 'date-fns';
 
-// const HOST = "http://localhost:8080";
-// const HOST = "http://catfood-server-dev.us-east-1.elasticbeanstalk.com";
-const HOST = "https://catfoodserver.molingguo.com/";
-
-class ItemDetails extends Component {
-  state = {
-    items: []
+export class ItemDetails extends Component {
+  constructor(props) {
+    super(props)
+    this.id = props.params.id;
   }
 
-  itemsUrl = `${HOST}/items`;
-
-  componentDidMount() {
-    axios.get(this.itemsUrl).then(res => {
-      console.log(res);
-      this.setState({ items: _.sortBy(res.data, ['name'])});
-    })
-  }
-
-  ItemPrice(props) {
-    const lastPrice = props.prices[props.prices.length - 1]
-    return <Text color="#bc2848">${lastPrice.value}</Text>
-  }
-
-  Promotions(props) {
-    const lastPrice = props.prices[props.prices.length - 1]
+  DetailsInfo(props) {
+    const item = props.item;
+    const chartOptions = [
+      { property: 'value', type: 'line', thickness: 'hair' },
+      { property: 'value', type: 'point', point: 'circle', thickness: 'xsmall' }
+    ];
+    const data = item.prices.map((price) => {
+      let result = price;
+      if (price.promotions.length) {
+        result.hasPromo = result.value;
+        chartOptions.push({
+          property: 'hasPromo', type: 'point', point: 'star', thickness: 'small'
+        });
+      }
+      return result;
+    });
     return (
-      <Box direction="row" margin={{vertical: "5px"}}>
-        {lastPrice.promotions.length > 0 &&
-          lastPrice.promotions.map(promo =>
-            <Tag key={promo} value={promo} size="small" background="#1b8b3f" border={false}></Tag>
-          )
-        }
+      <Box pad="medium" gap="medium">
+        <CardHeader>
+          <Anchor href={item.link} target="_blank" weight="normal" size="small">
+            {item.name}
+          </Anchor>
+        </CardHeader>
+        <CardBody >
+          <Box height="120px" margin={{vertical: "10px"}} align="start">
+            <Image fit="contain" src={item.image}></Image>
+          </Box>
+          <DataChart
+            data={data}
+            series={[
+              { property: 'date', render: (value, datam, dataIndex) => {
+                return format(new Date(value), 'MMM d HH:mm');
+              }},
+              { label: 'price', property: 'value', prefix: '$'},
+              { label: 'promotion', property: 'promotions', render: (value) => value.length > 0 ? value.join(', ') : null },
+              { property: 'hasPromo', render: () => null }
+            ]}
+            chart={chartOptions}
+            guide={{ y: { granularity: 'medium' }}}
+            detail={true}
+            legend={true}
+          />
+        </CardBody>
       </Box>
     )
   }
 
   render() {
+    this.item = this.props.items.find((item) => item.id === this.id);
     return (
-      <Box pad="medium" gap="medium" direction="row" wrap={true}>
-        {
-          this.state.items.map(item =>
-            <Card key={item.name} height="auto" width="290px" background="light-1" margin="xsmall" pad="medium">
-              <CardHeader height="65px"><Text size="small">{item.name}</Text></CardHeader>
-              <CardBody align="center">
-                <Anchor href={item.link} target="_blank">
-                  <Box height="120px" margin={{vertical: "10px"}}><Image fit="contain" src={item.image}></Image></Box>
-                </Anchor>
-                <this.ItemPrice prices={item.prices} />
-                <Text size="small">{ item.size }</Text>
-                <this.Promotions prices={item.prices} />
-              </CardBody>
-            </Card>
-          )
-        }
-      </Box>
-
+      this.item ? <this.DetailsInfo item={this.item} /> : null
     )
   }
 }
 
-export default ItemDetails
+export default withParams(ItemDetails);
