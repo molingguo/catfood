@@ -17,7 +17,7 @@ export class ItemDetails extends Component {
     ];
     const data = item.prices.map((price) => {
       let result = price;
-      if (price.promotions.length) {
+      if (price.promotions?.length) {
         result.hasPromo = result.value;
         chartOptions.push({
           property: 'hasPromo', type: 'point', point: 'star', thickness: 'small'

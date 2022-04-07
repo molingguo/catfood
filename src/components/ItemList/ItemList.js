@@ -14,7 +14,7 @@ class ItemList extends Component {
     const lastPrice = props.prices[props.prices.length - 1]
     return (
       <Box direction="row" margin={{vertical: "5px"}}>
-        {lastPrice.promotions.length > 0 &&
+        {lastPrice.promotions?.length > 0 &&
           lastPrice.promotions.map(promo =>
             <Tag key={promo} value={promo} size="small" background="#1b8b3f" border={false}></Tag>
           )
