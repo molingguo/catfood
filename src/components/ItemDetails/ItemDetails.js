@@ -1,4 +1,4 @@
-import { Box, CardHeader, CardBody, Anchor, Image, DataChart } from 'grommet';
+import { Box, CardHeader, CardBody, Anchor, Image, DataChart, Text } from 'grommet';
 import React, { Component } from 'react';
 import { withParams } from '../../utils/router';
 import { format } from 'date-fns';
@@ -35,6 +35,9 @@ export class ItemDetails extends Component {
         <CardBody >
           <Box height="120px" margin={{vertical: "10px"}} align="start">
             <Image fit="contain" src={item.image}></Image>
+          </Box>
+          <Box margin={{vertical: "20px"}}>
+            <Text size="small">Last Update: {format(new Date(item.updatedAt), 'Pp')}</Text>
           </Box>
           { item.prices.length > 1 ?
             <DataChart
